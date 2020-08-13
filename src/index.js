@@ -105,7 +105,7 @@ $("#startButton").click(function () {
                     </div>
                     <div class="media-content">
                         <p class="title is-6">
-                    repo: <a href="${item.repo.url}">${repoName}</a> [${
+                    repo: <a href="${item.repoUrl}">${repoName}</a> [${
           repoLanguage || "?"
         } / ${repoStars} stars]
                     </p>
