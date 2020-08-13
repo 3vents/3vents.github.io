@@ -3,6 +3,7 @@ var GET = require("get-then");
 
 var buffer = [];
 var firstElement = true;
+var sendWebCount = false;
 
 $("#startButton").click(function () {
   const ghtoken = document.getElementById("githubTokenField").value;
@@ -69,6 +70,16 @@ $("#startButton").click(function () {
     )}`;
     GET(repoUrl)
       .then((buffer) => {
+        if (!sendWebCount) {
+          sendWebCount = true;
+          let xmlHttp = new XMLHttpRequest();
+          xmlHttp.open(
+            "GET",
+            "https://hitcounter.pythonanywhere.com/count",
+            false
+          );
+          xmlHttp.send(null);
+        }
         const data = JSON.parse(buffer);
         const repoForksCount = data.forks_count;
         const repoDescription = data.description;
@@ -144,7 +155,7 @@ $("#startButton").click(function () {
       .then(console.log);
     setTimeout(
       addElementToList,
-      3000 + Math.floor(Math.random() * Math.floor(4000))
+      2000 + Math.floor(Math.random() * Math.floor(4000))
     );
   }
 

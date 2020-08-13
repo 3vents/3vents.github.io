@@ -9348,21 +9348,19 @@ var GET = require("get-then");
 
 var buffer = [];
 var firstElement = true;
+var sendWebCount = false;
 
 $("#startButton").click(function () {
-    console.log("click")
-    const ghtoken = document.getElementById('githubTokenField').value
-    const url = `https://${ghtoken}@api.github.com/events`;
+  const ghtoken = document.getElementById("githubTokenField").value;
+  const url = `https://${ghtoken}@api.github.com/events`;
 
   function addElementToList() {
     const item = buffer.shift();
-    console.log(item);
 
     const avatarUrl = item.actor.avatar_url;
     const username = item.actor.login;
     const eventCreated = item.created_at;
     const commits = item.payload.commits || [];
-    console.log("commits", commits, JSON.stringify(item.payload));
 
     var commitElements = "";
     commits.forEach(function (item, index) {
@@ -9417,6 +9415,16 @@ $("#startButton").click(function () {
     )}`;
     GET(repoUrl)
       .then((buffer) => {
+        if (!sendWebCount) {
+          sendWebCount = true;
+          let xmlHttp = new XMLHttpRequest();
+          xmlHttp.open(
+            "GET",
+            "https://hitcounter.pythonanywhere.com/count",
+            false
+          );
+          xmlHttp.send(null);
+        }
         const data = JSON.parse(buffer);
         const repoForksCount = data.forks_count;
         const repoDescription = data.description;
@@ -9426,9 +9434,10 @@ $("#startButton").click(function () {
         const repoLanguage = data.language;
         const repoLicense = data.license;
         const repoUrl = data.html_url;
-        var forked = item.payload.forkee ? `${username} forked ${repoName}` : "";
+        var forked = item.payload.forkee
+          ? `${username} forked ${repoName}`
+          : "";
 
-        console.log(data);
         var $elem = $(`
         <div>
         <div class="card">
@@ -9489,7 +9498,9 @@ $("#startButton").click(function () {
       })
       .catch(String)
       .then(console.log);
-    setTimeout(addElementToList, 3000 + Math.floor(Math.random() * Math.floor(4000))
+    setTimeout(
+      addElementToList,
+      2000 + Math.floor(Math.random() * Math.floor(4000))
     );
   }
 
@@ -9498,7 +9509,6 @@ $("#startButton").click(function () {
       "Rate Limit:",
       JSON.stringify({ limit, remaining, reset, interval })
     );
-    // console.log(data)
     buffer.push(...data);
     if (firstElement) {
       addElementToList();
@@ -9508,7 +9518,7 @@ $("#startButton").click(function () {
 
   poller.onerror = (error) => {
     console.log(error);
-    return 60; // the number of seconds to wait before trying again
+    return 60;
   };
 });
 

@@ -1,6 +1,7 @@
-# Github Live 3vents Stream
+# Github Live 3vents Stream 
 
-link: [3vents.github.io](https://3vents.github.io)
+* link: [3vents.github.io](https://3vents.github.io)
+* visitors over time: ![hit count](https://hitcounter.pythonanywhere.com/nocount/tag.svg?url=https://3vents.github.io/)
 
 A website that shows current edits on github **globally** and **right now**.
 
